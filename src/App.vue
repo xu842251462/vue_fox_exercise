@@ -1,26 +1,55 @@
 <template>
   <div class="app">
     <h1 class="title">🦊 Choose your favorite foxes! 🦊</h1>
-    <img
-      class="card"
-      alt="So floofy!"
-      src="https://randomfox.ca/images/21.jpg"
-    />
+    <img class="card" alt="So floofy!" :src="currentFoxUrl" />
+
     <button class="fav">Fave</button>
     <button class="next">Next</button>
   </div>
+
+  <button @click="loadFox" class="next">Next</button>
+
+  <section class="favorites">
+    <h2>Favorite Floofs</h2>
+    <ul class="favorites-list">
+      <li class="favorites-item">
+        <img class="favorites-img" />
+        <button class="remove">Remove</button>
+      </li>
+
+      <li
+        v-for="(floof, index) in favorites"
+        :key="floof"
+        class="favorites-item"
+      ></li>
+    </ul>
+  </section>
 </template>
 
 
 <script>
-import HelloWorldVue from "./components/HelloWorld.vue";
 export default {
-  name: "App",
-  components: {
-    HelloWorld: HelloWorldVue,
+  data() {
+    return {
+      currentFoxUrl: null,
+      favorites: [],
+    };
   },
+
+  methods: {
+    loadFox: async function () {
+      const response = await fetch("https://randomfox.ca/floof/");
+      const foxData = await response.json();
+      this.currentFoxUrl = foxData.image;
+    },
+    addFave() {
+      this.favorites.push(this.currentFoxUrl);
+    },
+  },
+  created() {},
 };
 </script>
+
 
 <style>
 body {
